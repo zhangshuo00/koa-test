@@ -1,9 +1,11 @@
 const AESCipher = require("../utils/crypto");
 const axios = require('axios');
 
+const {aesToken, flomoToken} = require("../config/token.js");
+
 const backChallenge = (ctx) => {
   let {encrypt} = ctx.request.body;
-  const cipher = new AESCipher("lovelife");
+  const cipher = new AESCipher(aesToken);
   const decrypted = cipher.decrypt(encrypt);
 
   console.log(decrypted);
@@ -11,7 +13,7 @@ const backChallenge = (ctx) => {
   const content = JSON.parse(decrypted).event.message.content;
   const text = JSON.parse(content).text;
   
-  axios.post('https://flomoapp.com/iwh/MTU4NTQ/c3982e38acc11a50a09d323351ba65a8/',{
+  axios.post(`https://flomoapp.com/iwh/MTU4NTQ/${flomoToken}/`,{
     "content": text
   })
   .then(function (res) {
